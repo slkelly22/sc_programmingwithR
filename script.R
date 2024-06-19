@@ -3,9 +3,10 @@
 
 dir.create("r-novice-inflammation")
 
+# Episode 1: Analyzing Patient Data
 # Studying inflammation in patients; each row is a patient, each column is a daily inflammation measure
 
-read.csv("r-novice-inflammation/data/inflammation-01.csv", header = FALSE) # there are no headers so it's important to do header = F or else it will create headers from your first row of data and append an X to the number (in this case)
+read.csv("r-novice-inflammation/data/inflammation-01.csv", header = FALSE) # there are no headers so it's important to do header = F or else it will create headers from your first row of data and append an X (in this case) to the number 
 
 weight_kg <- 55
 2.2 * weight_kg
@@ -30,7 +31,7 @@ dat[c(1, 3, 5), c(10, 20)] # c will combine the values you give it into one vect
 1:5 # generates the sequence
 3:12
 
-dat[c(1:4), c(1:10)] # actually I don't need the c(), you can just do: 
+dat[c(1:4), c(1:10)] # actually you don't need the c(), you can just do: 
 dat[1:4, 1:10] 
 
 dat[5, ]# to select all rows or columns, just leave that empty; all columns from row 5
@@ -96,3 +97,73 @@ min_day_inflammation <- apply(dat, 2, min)
 plot(min_day_inflammation)
 # These plots indicate unlikely results so either mistake in our calculations or something is wonky with the data
 # SK: what's the point of suggesting that the data is wrong and then then moving on to the next lesson???
+
+
+# Episode 2: Creating Functions
+
+fahrenheit_to_celsius <- function(temp_F) {
+  temp_C <- (temp_F - 32) * 5 / 9
+  return(temp_C)
+}
+# the assignment operator provides the function name
+# the list of arguments are contained within parentheses
+# the body of the function (what's executed) is contained within curly braces
+# the return statement defines what will be returned by the function; note: in R, it's not necessary to include a return statement
+
+# Calling our function is no different than calling any other function
+fahrenheit_to_celsius(32) # freezing point of water
+fahrenheit_to_celsius(212) # boiling point of water
+
+# Composing Functions -- this section seems a little unnecessary at this stage
+celsius_to_kelvin <- function(temp_C) {
+  temp_K <- temp_C + 273.15
+  return(temp_K)
+}
+# Freezing point of water in Kelvin
+celsius_to_kelvin(0)
+
+fahrenheit_to_kelvin <- function(temp_F) {
+  temp_C <- fahrenheit_to_celsius(temp_F)
+  temp_K <- celsius_to_kelvin(temp_C)
+  return(temp_K)
+}
+fahrenheit_to_kelvin(32) # freezing point of water in Kelvin
+
+# can also nest these functions
+celsius_to_kelvin(fahrenheit_to_celsius(32))
+
+# Activities (Create a Function, Named Variables and Scope of Variables) - Skip
+
+# Testing, Error Handling, and Documenting
+# Once we start putting things in functions, we need to start testing that those functions are working correctly
+
+center <- function(data, midpoint) {
+  new_data <- (data - mean(data)) + midpoint
+  return(new_data)
+}
+
+# Creating a small dataset to see if our funciton works like we want
+z <- c(0, 0, 0, 0)
+z
+
+center(z, 3) # yup, looks good
+
+# Now we're going to use our function on the inflammation data to center day 4 around zero
+centered <- center(dat[, 4], 0)
+head(centered)
+
+# confirming that it matches the original data
+mean(dat[, 4]) # original mean, 1.75
+mean(centered) # 0 
+
+sd(dat[, 4]) # 1.06
+sd(centered) # 1.06
+
+# difference in sd before and after 
+sd(dat[, 4]) - sd(centered) # 0
+
+# Sometimes a small difference can be detected due to rounding
+# R has a function for comparing two objects allowing for rounding errors: all.equal()
+all.equal(sd(dat[, 4]), sd(centered)) # TRUE
+
+# Error Handling
