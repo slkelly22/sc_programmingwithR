@@ -142,7 +142,7 @@ center <- function(data, midpoint) {
   return(new_data)
 }
 
-# Creating a small dataset to see if our funciton works like we want
+# Creating a small dataset to see if our function works like we want
 z <- c(0, 0, 0, 0)
 z
 
@@ -167,3 +167,52 @@ sd(dat[, 4]) - sd(centered) # 0
 all.equal(sd(dat[, 4]), sd(centered)) # TRUE
 
 # Error Handling
+# What happens if we have missing data in the data argument we provide to center? 
+datNA <- dat
+datNA[10, 4] <- NA
+
+center(datNA[ ,4], 0) #NAs......
+
+# We'll revise the function to resolve the NA issue
+center <- function(data, midpoint) {
+  new_data <- (data - mean(data, na.rm = TRUE)) + midpoint
+  return(new_data)
+}
+
+center(datNA[, 4], 0) # now works
+
+# What happens if we handed the function a factor or character vector? 
+datNA[, 1] <- as.factor(datNA[, 1])
+str(datNA[,1])
+datNA[, 2] <- as.character(datNA[, 2])
+str(datNA[, 2])
+
+center(datNA[, 1], 0) # error: argument is not numeric or logical
+center(datNA[, 2], 0)
+# Luckily, the errors are informative, but sometimes you need to add in error handling using the warning and stop functions. 
+
+# Documentation
+# You can comment your functions but more formal documentation for R functions is written in separate .Rd 
+# the roxygen2 package allows R coders to write documentation alongside the function code and then process it into the appropriate .Rd files
+
+# Exercise: Function to create Graphs
+# Write a function called analyze that takes a filename as an argument and displays the three graphs produced in the previous lesson
+
+analyze <- function(filename) {
+  #inputs the file, creates an object using apply, then plots that object
+  dat <- read.csv(file = filename, header = FALSE)
+  avg_day_inflammation <- apply(dat, 2, mean)
+  plot(avg_day_inflammation)
+  max_day_inflammation <- apply(dat, 2, max)
+  plot(max_day_inflammation)
+  min_day_inflammation <- apply(dat, 2, min)
+  plot(min_day_inflammation)
+}
+
+# Now using the function
+analyze("r-novice-inflammation/data/inflammation-01.csv")
+analyze("r-novice-inflammation/data/inflammation-02.csv")
+analyze("r-novice-inflammation/data/inflammation-03.csv")
+analyze("r-novice-inflammation/data/inflammation-04.csv")
+analyze("r-novice-inflammation/data/inflammation-05.csv") 
+analyze("r-novice-inflammation/data/inflammation-11.csv")
