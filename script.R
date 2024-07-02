@@ -216,3 +216,39 @@ analyze("r-novice-inflammation/data/inflammation-03.csv")
 analyze("r-novice-inflammation/data/inflammation-04.csv")
 analyze("r-novice-inflammation/data/inflammation-05.csv") 
 analyze("r-novice-inflammation/data/inflammation-11.csv")
+
+# Defining Defaults
+# We'll edit the center function to specify the midpoint argument with a default of 0
+# This still allows you to pass an argument when you need to, and rely on the default when you don't need to
+
+center <- function(data, midpoint = 0) {
+  new_data <- (data - mean(data)) + midpoint
+  return(new_data)
+}
+
+test_data <- c(0,0,0,0)
+center(test_data, 3)
+
+more_data <- 5 + test_data
+more_data
+center(more_data)
+
+# Example of how the arguments are matched by position or call
+display <- function(a = 1, b = 2, c = 3) {
+  result <- c(a, b, c)
+  names(result) <- c("a", "b", "c")
+  return(result)
+}
+
+# calling the function without specifying any arguments
+display() # provides the names (a,b,c) and 1, 2, 3
+
+display(55) # provides only the first argument; output: 55, 2, 3
+display(55, 66) # two arguments; output: 55, 66, 3
+display(55, 66, 77)
+display(c = 77) # output: 1, 2, 77
+
+?read.csv # this tells us that the function has one argument (file), that doesn't have a default value
+# and six others that do have default values
+
+# Episode 3: Analyzing Multiple Data Sets
