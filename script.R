@@ -409,5 +409,5 @@ sapply(filenames, FUN = analyze) # wow, that's efficient
 # 1. Don't use a loop when a vectorized alternative exists
 # 2. Don't grow objects (c, cbind, etc) during the loop
 # 3. Allocate an object to hold the results
-# Then if provides examples of different loops. I think I prefer the apply family. 
+# Then it provides examples of different loops. I think I prefer the apply family. 
 # Final Key Point: Use functions such as apply instead of for loops to operate on the values in a data structure
