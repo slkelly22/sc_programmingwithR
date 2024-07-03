@@ -353,6 +353,61 @@ analyze_all <- function(folder = "r-novice-inflammation/data", pattern) {
 } # This only creates the function; remember to also run the function (see below)! 
 analyze_all() # Yes! 
 
-# That's the end of Episode 3
+# That's the end of Episode 3 (going to do the loop content below before moving on to Episode 4)
 
+# Linked Supplementary Episode: Loops in R
+# https://swcarpentry.github.io/r-novice-inflammation/15-supp-loops-in-depth.html
 
+# Vectorized Operations
+a <- 1:10
+b <- 1:10
+
+res <- numeric(length = length(a))
+for (i in seq_along(a)) {
+  res[i] <- a[i] + b[i]
+} # ugh, what a complicated way to add two vectors
+res
+
+res2 <- a + b
+res2 # much easier
+
+all.equal(res, res2) #TRUE
+
+# Vector Recycling
+# This is important: if you perform an operation on two vectors of unequal length, R will recycle elements of the shorter vector to match the longer vector
+
+a <- 1:10
+b <- 1:5
+a + b # When R gets to the end of b, it starts again at the beginning of b to add until a is done
+
+# Handy in occasions like this
+a <- 1:10
+b <- 5 # b is a vector of 1 (the number 5) and it just gets recycled until a is done
+a * b
+
+# When the length of the longer object is a multiple of the shorter object length (as in our example above), the recycling occurs silently. When the longer object length is not a multiple of the shorter object length, a warning is given:
+a <- 1:10
+b <- 1:7
+a + b # it does add them (with recycling) 
+# but you also receive a warning message: longer object is not a multiple of shorter object length
+
+# for or apply? 
+# apply - apply over the margins of an array (rows or columns of a matrix)
+# lapply - apply over an object and return list
+# sapply - apply over an object and return a simplified object (an array) if possible
+# vapply - similar to sapply but you specify the type of object returned by the iterations
+# each of these has an argument FUN that takes a function to apply to each element of the object
+
+# Instead of using a loop like earlier, you can use sapply over filesnames with FUN = analyze
+sapply(filenames, FUN = analyze) # wow, that's efficient
+
+# Takeaway: personal preference whether to use "for" or one of the apply family functions
+# Using an apply function forces you to encapsulate your operations as a function rather than separate calls with for
+
+# Loops in R are Slow
+# No, they are not, if you follow these rules: 
+# 1. Don't use a loop when a vectorized alternative exists
+# 2. Don't grow objects (c, cbind, etc) during the loop
+# 3. Allocate an object to hold the results
+# Then if provides examples of different loops. I think I prefer the apply family. 
+# Final Key Point: Use functions such as apply instead of for loops to operate on the values in a data structure
