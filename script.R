@@ -252,3 +252,74 @@ display(c = 77) # output: 1, 2, 77
 # and six others that do have default values
 
 # Episode 3: Analyzing Multiple Data Sets
+# How can you do the same thing to multiple data sets? 
+
+# We've created a function (analyze) that creates graphs for a single data set
+# And we can use that to analyze other data sets one by one
+# But we have dozens of data sets and more on the way so we need to tell the computer how to repeat things
+
+# For Loops
+best_practice <- c("Let", "the", "computer", "do", "the", "work")
+best_practice
+
+print_words <- function(sentence) {
+  for (word in sentence) {
+    print(word)
+  }
+}
+
+print_words(best_practice)
+print_words(best_practice[-6]) # everything but the last word
+
+# For Loop Form
+for (variable in collection) {
+  do thing with variable
+}
+
+len <- 0
+vowels <- c("a", "e", "i", "o", "u")
+
+for (v in vowels) {
+  len <- len + 1
+}
+len # output is 5
+# It’s worth tracing the execution of this little program step by step. 
+# Since there are five elements in the vector vowels, the statement inside the loop will be executed five times. 
+# The first time around, len is zero (the value assigned to it on line 1) and v is "a". 
+# The statement adds 1 to the old value of len, producing 1, and updates len to refer to that new value. 
+# The next time around, v is "e" and len is 1, so len is updated to be 2. 
+# After three more updates, len is 5; since there is nothing left in the vector vowels for R to process, the loop finishes.
+
+letter <- "z"
+
+for (letter in c("a", "b", "c")) {
+  print(letter)
+}
+
+letter # now it's "c"
+
+length(vowels) #5
+length(letter) #1
+
+# R has a build in function called seq that creates a list of numbers
+seq(3)
+# Using seq, write a function that prints the first N natural numbers, one per line: 
+print_N <- function(N) {
+  nseq <- seq(N)
+  for (num in nseq) {
+    print(num)
+  }
+}
+
+print_N(10)
+
+# Processing Multiple Files
+# We now have almost everything we need to process all our data files. 
+# The only thing that’s missing is a function that finds files whose names match a pattern. 
+# We do not need to write it ourselves because R already has a function to do this called list.files.
+
+?list.files # Base R, lists the files in a directory/folder
+# If we run the function without any arguments, it returns every file in the current working directory
+list.files()
+# the first argument is the path (default is ., current wd); second argument is the pattern being searched
+list.files(path = "r-novice-inflammation/data", pattern = "csv") # finding all the csv files within my data folder
