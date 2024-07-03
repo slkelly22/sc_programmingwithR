@@ -322,4 +322,37 @@ print_N(10)
 # If we run the function without any arguments, it returns every file in the current working directory
 list.files()
 # the first argument is the path (default is ., current wd); second argument is the pattern being searched
+
 list.files(path = "r-novice-inflammation/data", pattern = "csv") # finding all the csv files within my data folder
+
+list.files("r-novice-inflammation/data", "inflammation") # pattern match is now for inflammation
+
+# list.files result is a vector of strings, which means we can loop over it to do something with each filename in turn. 
+# In our case, the “something” we want is our analyze function.
+
+# Because we have put our data in a separate subdirectory, if we want to access these files using the output of list.files we also need to include the “path” portion of the file name. 
+# We can do that by using the argument full.names = TRUE
+list.files(path = "r-novice-inflammation/data", pattern = "csv", full.names = TRUE) # this returns the full path name in the output
+# instead of "inflammation-04.csv", I get "r-novice-inflammation/data/inflammation-04.csv"
+
+# Analyze function on the first three files in the vector returned by list.files
+filenames <- list.files(path = "r-novice-inflammation/data", pattern = "inflammation-[0-9]{2}.csv", full.names = TRUE) # this is using regular expressions! 
+filenames <- filenames[1:3]
+for (f in filenames) {
+  print(f)
+  analyze(f)
+}
+
+# Write a function called analyze_all that takes a folder path and a filename pattern as its arguments and runs the analyze function for each file whose name matches the pattern
+analyze_all <- function(folder = "r-novice-inflammation/data", pattern) {
+  filenames <- list.files(path = folder, pattern = "inflammation", full.names = TRUE)
+  for (f in filenames) { 
+    print(f) # I like adding this because you can see in the console which files are run through the loop
+    analyze(f)
+    }
+} # This only creates the function; remember to also run the function (see below)! 
+analyze_all() # Yes! 
+
+# That's the end of Episode 3
+
+
